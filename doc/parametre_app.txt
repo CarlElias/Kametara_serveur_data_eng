@@ -1,0 +1,30 @@
+🔧 Airflow (orchestration)
+    👉 http://81.28.4.16:8080
+    Login : admin
+    Password : password123
+
+📊 Metabase (BI / dashboard)
+    👉 http://81.28.4.16:3000
+    Première connexion → création du compte admin
+    DB déjà connectée (Postgres)
+
+🪣 MinIO (stockage S3)
+    👉 http://81.28.4.16:9001
+    User : admin
+    Password : password123
+    👉 API S3 : http://81.28.4.16:9002
+
+📡 Kafdrop (interface Kafka)
+    👉 http://81.28.4.16:9000
+    Pas d’authentification
+    Permet de voir topics, messages
+
+
+🗄️ Accès aux bases de données
+    🐘 PostgreSQL
+        👉 Connexion :
+            Host : 81.28.4.16
+            Port : 5432
+            User : postgres
+            Password : postgres
+            Database : postgres

@@ -9,12 +9,12 @@ x-airflow-common: &airflow-common
   image: apache/airflow:2.8.0-python3.11
   environment: &airflow-env
     AIRFLOW__CORE__LOAD_EXAMPLES: "False"
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://postgres:postgres@postgres:5432/airflow
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
   volumes:
-    - ./volumes/dags:/opt/airflow/dags
-    - ./volumes/logs:/opt/airflow/logs
-    - ./volumes/plugins:/opt/airflow/plugins
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ./plugins:/opt/airflow/plugins
   depends_on:
     postgres:
       condition: service_healthy
@@ -27,7 +27,7 @@ services:
   # DATABASE CENTRALE (Airflow + Metabase)
   # ─────────────────────────────────────────
   postgres:
-    image: postgres:15
+    image: postgres:latest
     container_name: postgres
     hostname: postgres
     restart: always
@@ -36,8 +36,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     volumes:
-      - volumes/postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql
+      - ./init-db:/docker-entrypoint-initdb.d   # scripts SQL d'init des databases
     ports:
       - "5432:5432"
     healthcheck:
@@ -54,13 +54,9 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
-    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    volumes:
-      - volumes/zookeeper_data:/var/lib/zookeeper/data
-      - volumes/zookeeper_log:/var/lib/zookeeper/log
     ports:
       - "2181:2181"
     networks:
@@ -69,7 +65,6 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.4.0
     container_name: kafka
-    restart: always
     depends_on:
       - zookeeper
     ports:
@@ -79,21 +74,18 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://host.docker.internal:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-    volumes:
-      - volumes/kafka_data:/var/lib/kafka/data
     networks:
       - data-network
 
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
     container_name: kafdrop
-    restart: always
     depends_on:
       - kafka
     ports:
@@ -109,10 +101,9 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio
-    restart: always
     ports:
-      - "9001:9001"   # Console UI
-      - "9002:9000"   # S3 API
+      - "9001:9001"  # Console UI
+      - "9002:9000"  # S3 API
     environment:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password123
@@ -141,7 +132,7 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
-    container_name: airflow-webserver
+    container_name: airflow-webserver-sn
     restart: always
     depends_on:
       postgres:
@@ -154,7 +145,7 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
-    container_name: airflow-scheduler
+    container_name: airflow-scheduler-sn
     restart: always
     depends_on:
       postgres:
@@ -184,26 +175,16 @@ services:
       postgres:
         condition: service_healthy
     volumes:
-      - volumes/metabase_data:/metabase-data
+      - metabase_data:/metabase-data
     networks:
       - data-network
 
-# =============================================================
-# VOLUMES — tous créés automatiquement par Docker au démarrage
-# Aucun dossier à créer manuellement sur le serveur cible
-# =============================================================
 volumes:
   postgres_data:
     driver: local
   minio_data:
     driver: local
   metabase_data:
-    driver: local
-  kafka_data:
-    driver: local
-  zookeeper_data:
-    driver: local
-  zookeeper_log:
     driver: local
 
 networks:
