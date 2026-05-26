@@ -5,3 +5,4 @@ volumes/postgres_data/
 volumes/zookeeper_data/
 volumes/zookeeper_log/
 volumes/metabase_data/
+venv/

@@ -22,6 +22,8 @@ chown -R 1000:1000 volumes/kafka_data
 chown -R 1000:1000 volumes/zookeeper_data
 chown -R 1000:1000 volumes/zookeeper_log
 
+apt install python3.14-venv
+
 echo "✅ Dossiers créés :"
 echo "   volumes/dags/"
 echo "   volumes/plugins/"
@@ -33,5 +35,9 @@ echo "   volumes/kafka_data/"
 echo "   volumes/zookeeper_data/"
 echo "   volumes/zookeeper_log/"
 echo ""
-echo "🚀 Tu peux maintenant lancer la stack :"
-echo "   docker compose up -d"
+echo "🚀 Installation de la stack :"
+docker compose up -d
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt

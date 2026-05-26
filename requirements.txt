@@ -1,4 +1,7 @@
 kafka-python
+confluent-kafka
+faker
+simplejson
 boto3
 snowflake-connector-python
 dbt-core

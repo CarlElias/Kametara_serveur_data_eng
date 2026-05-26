@@ -19,7 +19,6 @@
     Pas d’authentification
     Permet de voir topics, messages
 
-
 🗄️ Accès aux bases de données
     🐘 PostgreSQL
         👉 Connexion :
@@ -28,3 +27,18 @@
             User : postgres
             Password : postgres
             Database : postgres
+
+SnowFlake 
+    nom_utilisateur : csahonin
+    mdp : Carleliassimeon2026
+    account = "ROUUVCB-DQ04527"
+    https://app.snowflake.com/rouuvcb/dq04527/#/homepage
+    Username: CSAHONIN
+    Dedicated Login URL: https://rouuvcb-dq04527.snowflakecomputing.com
+
+
+Serveur 
+    AdresseIp : 81.28.4.16
+    momserveur : ubuntucarl
+    login : root
+    mdp : Carleliassimeon2026

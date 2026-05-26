@@ -1,0 +1,4 @@
+AdresseIp : 81.28.4.16
+momserveur : ubuntucarl
+login : root
+Carleliassimeon2026
