@@ -1,0 +1,29 @@
+[2026-06-25T14:20:00.733+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: financial_sales_transactions.generate_transactions scheduled__2026-06-25T14:15:00+00:00 [queued]>
+[2026-06-25T14:20:00.741+0000] {taskinstance.py:1957} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: financial_sales_transactions.generate_transactions scheduled__2026-06-25T14:15:00+00:00 [queued]>
+[2026-06-25T14:20:00.742+0000] {taskinstance.py:2171} INFO - Starting attempt 1 of 1
+[2026-06-25T14:20:00.753+0000] {taskinstance.py:2192} INFO - Executing <Task(BashOperator): generate_transactions> on 2026-06-25 14:15:00+00:00
+[2026-06-25T14:20:00.760+0000] {standard_task_runner.py:60} INFO - Started process 12622 to run task
+[2026-06-25T14:20:00.763+0000] {standard_task_runner.py:87} INFO - Running: ['airflow', 'tasks', 'run', 'financial_sales_transactions', 'generate_transactions', 'scheduled__2026-06-25T14:15:00+00:00', '--job-id', '17', '--raw', '--subdir', 'DAGS_FOLDER/dag_FinancialSales.py', '--cfg-path', '/tmp/tmprlr1o00b']
+[2026-06-25T14:20:00.795+0000] {standard_task_runner.py:88} INFO - Job 17: Subtask generate_transactions
+[2026-06-25T14:20:00.856+0000] {task_command.py:423} INFO - Running <TaskInstance: financial_sales_transactions.generate_transactions scheduled__2026-06-25T14:15:00+00:00 [running]> on host 21d7c1aadf9a
+[2026-06-25T14:20:01.036+0000] {taskinstance.py:2481} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='airflow' AIRFLOW_CTX_DAG_ID='financial_sales_transactions' AIRFLOW_CTX_TASK_ID='generate_transactions' AIRFLOW_CTX_EXECUTION_DATE='2026-06-25T14:15:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-06-25T14:15:00+00:00'
+[2026-06-25T14:20:01.095+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-06-25T14:20:01.096+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', '\n        python /opt/airflow/dags/scripts_python/FinancialSales_Transactions.py\n        ']
+[2026-06-25T14:20:01.109+0000] {subprocess.py:86} INFO - Output:
+[2026-06-25T14:20:01.201+0000] {subprocess.py:93} INFO - Traceback (most recent call last):
+[2026-06-25T14:20:01.201+0000] {subprocess.py:93} INFO -   File "/opt/airflow/dags/scripts_python/FinancialSales_Transactions.py", line 3, in <module>
+[2026-06-25T14:20:01.201+0000] {subprocess.py:93} INFO -     import simplejson as json
+[2026-06-25T14:20:01.201+0000] {subprocess.py:93} INFO - ModuleNotFoundError: No module named 'simplejson'
+[2026-06-25T14:20:01.205+0000] {subprocess.py:97} INFO - Command exited with return code 1
+[2026-06-25T14:20:01.220+0000] {taskinstance.py:2699} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/bash.py", line 212, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2026-06-25T14:20:01.224+0000] {taskinstance.py:1138} INFO - Marking task as FAILED. dag_id=financial_sales_transactions, task_id=generate_transactions, execution_date=20260625T141500, start_date=20260625T142000, end_date=20260625T142001
+[2026-06-25T14:20:01.299+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 17 for task generate_transactions (Bash command failed. The command returned a non-zero exit code 1.; 12622)
+[2026-06-25T14:20:01.394+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-06-25T14:20:01.496+0000] {taskinstance.py:3281} INFO - 0 downstream tasks scheduled from follow-on schedule check
